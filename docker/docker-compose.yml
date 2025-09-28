@@ -1,0 +1,59 @@
+version: '3.8'
+
+services:
+  parking-system:
+    build:
+      context: ..
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - GOOGLE_MAPS_API_KEY=${GOOGLE_MAPS_API_KEY}
+      - PARKING_API_KEY=${PARKING_API_KEY}
+      - SERPER_API_KEY=${SERPER_API_KEY}
+      - DATABASE_URL=sqlite:///data/parking_system.db
+      - REDIS_URL=redis://redis:6379
+      - LOG_LEVEL=INFO
+    volumes:
+      - parking_data:/app/data
+      - ../logs:/app/logs
+    depends_on:
+      - redis
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 30s
+      timeout: 3s
+      retries: 5
+
+  streamlit:
+    build:
+      context: ..
+      dockerfile: Dockerfile
+    ports:
+      - "8501:8501"
+    environment:
+      - PARKING_API_URL=http://parking-system:8000
+    command: ["streamlit", "run", "examples/web_interface.py", "--server.port=8501", "--server.address=0.0.0.0"]
+    depends_on:
+      - parking-system
+    restart: unless-stopped
+
+volumes:
+  parking_data:
+  redis_data:
