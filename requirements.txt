@@ -1,0 +1,45 @@
+# Core Dependencies
+openai-agents>=1.0.0
+openai>=1.30.0
+python-dotenv>=1.0.0
+fastapi>=0.104.0
+uvicorn>=0.24.0
+pydantic>=2.5.0
+httpx>=0.25.0
+asyncio-mqtt>=0.13.0
+
+# Data Processing
+pandas>=2.1.0
+numpy>=1.25.0
+geopy>=2.4.0
+requests>=2.31.0
+
+# Web Interface
+streamlit>=1.28.0
+gradio>=4.0.0
+
+# Database & Caching
+redis>=5.0.0
+sqlite3
+
+# Logging & Monitoring
+structlog>=23.2.0
+prometheus-client>=0.19.0
+
+# Development & Testing
+pytest>=7.4.0
+pytest-asyncio>=0.21.0
+black>=23.10.0
+flake8>=6.1.0
+mypy>=1.7.0
+
+# Deployment
+docker>=6.1.0
+gunicorn>=21.2.0
+kubernetes>=28.1.0
+
+# Optional: Voice Support
+# openai-agents[voice]>=1.0.0
+
+# Optional: Redis Session Support  
+# openai-agents[redis]>=1.0.0
